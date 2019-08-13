@@ -8,6 +8,7 @@ import * as range from '../utils/range';
 import log from '../utils/log';
 import BaseAttribute from './base-attribute';
 import typedArrayManager from '../utils/typed-array-manager';
+import {normalizeTransitionSettings} from './attribute-transition-utils';
 
 const DEFAULT_STATE = {
   isExternalBuffer: false,
@@ -143,11 +144,9 @@ export default class Attribute extends BaseAttribute {
     let settings = Array.isArray(accessor) ? opts[accessor.find(a => opts[a])] : opts[accessor];
 
     // Shorthand: use duration instead of parameter object
-    if (Number.isFinite(settings)) {
-      settings = {duration: settings};
-    }
+    settings = normalizeTransitionSettings(settings);
 
-    if (settings && settings.duration > 0) {
+    if (settings) {
       return Object.assign({}, transition, settings);
     }
 
